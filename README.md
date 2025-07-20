@@ -45,7 +45,7 @@ The system allows adding books and users, borrowing and returning books, and vie
    ```bash
    g++ library_system.cpp -o library_system
    ./library_system
-📋 Sample Menu
+## 📋 Sample Menu
 
 Library Menu;
 1) add_book
@@ -58,7 +58,7 @@ Library Menu;
 8) user_return_book
 9) print_users
 10) Exit
-📂 File Structure
+## 📂 File Structure
 library_system.cpp – Complete C++ source code
 
 README.md – Project documentation
@@ -72,9 +72,9 @@ Add GUI using Qt or integrate with a simple database
 
 Support due dates and penalties for late returns
 
-👨‍💻 Author
+## 👨‍💻 Author
 Created by Nour Mohamed
 Faculty of Science – Statistics & Computer Science Department – Ain Shams University
 
-🪪 License
+## 🪪 License
 This project is open-source and available for learning and educational purposes.
