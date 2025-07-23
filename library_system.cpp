@@ -6,6 +6,40 @@ using namespace std;
 const int MAX_books = 10;
 const int MAX_users = 10;
 
+bool is_text(string input) {
+    if (input.empty()) return false;
+
+    for (int i = 0; i < input.length(); i++) {
+        char c = input[i];
+
+        if (!((c >= 'A' && c <= 'Z') ||
+            (c >= 'a' && c <= 'z') ||
+            c == ' ')) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+
+bool is_number(string input) {
+    if (input.empty()) return false;
+
+    for (int i = 0; i < input.length(); i++) {
+        char c = input[i];
+
+        if (c < '0' || c > '9') {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+
 struct book {
     string name;
     int id;
@@ -16,12 +50,56 @@ struct book {
         id = -1;
         name = " ";
     }
+
     void read() {
-        cout << "please enter book info: id & name & total quantity: \n";
-        cin >> id;
-        cin>> name ;
-        cin>> total_quantity;
+        cout << "please enter book info: \n \n";
+        
+            while (true) {
+
+                string Id_input;
+                cout << "Enter Id:\n\n";
+                cin >> Id_input;
+                if (is_number(Id_input)) {
+                    id = stoi(Id_input);
+                    break;
+                }
+                else {
+                    cout << "invaild Id, please try again.\n\n";
+                }
+            }
+        
+
+        while (true) {
+
+            string Name_input;
+            cout << "Enter Name:\n\n";
+            cin >> Name_input;
+            if (is_text(Name_input)) {
+                name = Name_input;
+                break;
+            }
+            else {
+                cout << "invaild Name, please try again.\n\n";
+            }
+        }
+
+
+        while (true) {
+
+            string quantity_input;
+            cout << "Enter Quantity:\n\n";
+            cin >> quantity_input;
+            if (is_number(quantity_input)) {
+                total_quantity = stoi(quantity_input);
+                break;
+            }
+            else {
+                cout << "invaild spcialization, please try again.\n\n";
+            }
+        }
     }
+
+   
     bool has_prefix(string prefix) {
         if (name.size() < prefix.size()) {
             return false;
@@ -74,10 +152,41 @@ struct user {
         id = -1;
         len = 0;
     }
+
     void read() {
-        cout << "please enter user name & his national id: \n";
-        cin >> name >> id;
+        while (true) {
+
+            string Id_input;
+            cout << "Enter Id:\n\n";
+            cin >> Id_input;
+            if (is_number(Id_input)) {
+                id = stoi(Id_input);
+                break;
+            }
+            else {
+                cout << "invaild Id, please try again.\n\n";
+            }
+        }
+
+
+        while (true) {
+
+            string Name_input;
+            cout << "Enter Name:\n\n";
+            cin >> Name_input;
+            if (is_text(Name_input)) {
+                name = Name_input;
+                break;
+            }
+            else {
+                cout << "invaild Name, please try again.\n\n";
+            }
+        }
+
+
     }
+
+
     void borrowed(int book_id) {
         borrowed_books_id[len++] = book_id;
     }
@@ -152,9 +261,12 @@ struct library_system {
         }
     }
 
-    static int menu() {
-        int choice = -1;
-        while (choice == -1) {
+    bool vaild(int choice) {
+        return (1 <= choice && choice <= 10);
+    }
+     int menu() {
+        int choice ;
+        while (true) {
             cout << "\nLibrary Menu;\n";
             cout << "1) add_book\n";
             cout << "2) search_books_by_prefix\n";
@@ -167,11 +279,21 @@ struct library_system {
             cout << "9) print_users\n";
             cout << "10) Exit\n";
             cout << "\nEnter your menu choice [1 - 10]: ";
+            
             cin >> choice;
-            if (!(1 <= choice && choice <= 10)) {
-                cout << "Invalid choice. Try again\n";
-                choice = -1;                                                                     // loop keep working
+
+            if (cin.fail()) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(),'\n');
+                cout << "Invalid input. Please enter a number between 1 and 10.\n\n";
+                continue;
             }
+
+            if (!vaild(choice)) {
+                cout << "Invalid choice. Try again\n";
+                continue;                                                                // loop keep working
+            }
+            break;
         }
         return choice;
     }
@@ -184,7 +306,20 @@ struct library_system {
         cout << "enter book name prefix: ";
         int count = 0;
         string prefix;
-        cin >> prefix;
+
+        while (true) {
+            string prefix_input;
+            cout << "Enter prefix:\n\n";
+            cin >> prefix_input;
+            if (is_text(prefix_input)) {
+                prefix = prefix_input;
+                break;
+            }
+            else {
+                cout << "invaild prefix, please try again.\n\n";
+            }
+        }
+
         for (int i = 0; i < total_books; ++i) {
             if (books[i].has_prefix(prefix)) {
                 cout << books[i].name;
@@ -246,8 +381,10 @@ struct library_system {
         string book_name;
         string user_name;
         while (trail--){
-            cout<<"enter user name and book name\n";
-            cin>>user_name>>book_name;
+            cout << "enter user name:\n \n";
+            cin >> user_name;
+            cout<< "enter book name: \n\n";
+            cin>> book_name;
             user_idx= find_user(user_name);
 
             if(user_idx==-1){
